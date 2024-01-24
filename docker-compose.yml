@@ -1,0 +1,25 @@
+version: "3.8"
+
+networks:
+  cryptotracker:
+    name: cryptotracker
+    external: true
+
+services:
+  php:
+    container_name: cryptotracker-php
+    env_file:
+      - .env
+    networks:
+      - cryptotracker
+    restart: unless-stopped
+
+  caddy:
+    container_name: cryptotracker-caddy
+    depends_on:
+      - php
+    ports:
+      - "8950:80"
+    networks:
+      - cryptotracker
+    restart: unless-stopped

@@ -1,0 +1,23 @@
+version: '3.7'
+
+networks:
+  cryptotracker:
+    name: cryptotracker
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cryptotracker-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cryptotrackerdb
+      MYSQL_USER: cryptotracker
+      MYSQL_PASSWORD: cryptotracker
+    volumes:
+      - /opt/docker/cryptotrackerdb/mysql:/var/lib/mysql:delegated
+    networks:
+      - cryptotracker
+    ports:
+      - "8952:3306"
+    restart: unless-stopped

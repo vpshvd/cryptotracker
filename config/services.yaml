@@ -1,0 +1,30 @@
+parameters:
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  App\Command\PopulateCurrencyPairsCommand:
+    arguments:
+      $baseCurrencyCode: '%env(BASE_CURRENCY_CODE)%'
+      $quoteCurrencyCodes: '%env(csv:QUOTE_CURRENCY_CODES)%'
+
+  App\Service\ExchangeRateUpdaterService:
+    arguments:
+      $baseCurrencyCode: '%env(BASE_CURRENCY_CODE)%'
+
+  App\Client\BlockChainApiClient:
+    arguments:
+      $apiUrl: '%env(BLOCKCHAIN_API_URL)%'
+
+  App\Listener\ExceptionListener:
+    tags:
+      - { name: 'kernel.event_listener', event: 'kernel.exception', priority: 10 }
